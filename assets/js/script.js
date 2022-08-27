@@ -1,10 +1,11 @@
-var timerCount;
+var timerCount = 0;
 var startButton =document.querySelector( ".start-button");
 var quizQuestions= document.getElementById('quizQuestions')
 var currentQuestion= document.getElementById('question')
 var buttonOptions= document.getElementById('answers')
 var timerElement =document.querySelector(".timer-count");
-var QuesIndex=0;
+let shuffledQuestions, currentQuestionIndex;    
+
 
 var myQuestions = [
     {
@@ -54,45 +55,75 @@ var myQuestions = [
 //strtGame function is calles when the start quiz button is clicked
 function startQuiz(){
     timerCount= 75;
-    timerElement.textContent=timerCount;
-    console.log(myQuestions);
-     renderQuiz();
+      //hiding the start button
+      document.getElementById('container').style.display = "none";
+
+      // displaying the quiz question window
+      quizQuestions.style.display = "block";
+    
+    shuffledQuestions = myQuestions.sort(() => Math.random() - .5)
+    currentQuestionIndex = 0
+
+    renderQuestion();
+    
     //startTimer();
 
 }
 
 
-function renderQuiz() {
-    console.log(document.getElementById("quizQuestions"));
-    //hiding the start button
-    document.getElementById('container').style.display = "none";
+function renderQuestion() {
+    timerElement.textContent=timerCount;
+  
 
-   // displaying the quiz question window
-   quizQuestions.style.display = "block";
-
-    var currentAnswerOptions = myQuestions[QuesIndex].answers;
+    var currentAnswerOptions = shuffledQuestions[currentQuestionIndex].answers;
    
  for (const property in currentAnswerOptions) {
+    
     var answerButton = document.createElement("button");
-    console.log(currentAnswerOptions[property]);
-   // answerButton.setAttribute("value", correctAnswer);
-   var option= currentAnswerOptions[property];
-   console.log(option);
+    var option= currentAnswerOptions[property];
+    var selectedQuestion = shuffledQuestions[currentQuestionIndex];
     answerButton.textContent = option;
-    currentQuestion.textContent =  myQuestions[QuesIndex].question;
+    currentQuestion.textContent =  selectedQuestion.question;
     buttonOptions.appendChild(answerButton);
 
-    answerButton.addEventListener("click",Iscorrect);
-}
+    
+    //answerButton.addEventListener("click",isCorrect);
+     answerButton.addEventListener("click", function() {
+        isCorrect(selectedQuestion,answerButton);
+      });
+} 
 
   }
 
- function Iscorrect () {
-    console.log("called");
-if(this.textContent === myQuestions[QuesIndex].correctAnswer)
-{window.alert("Correct");}
+
+  function isCorrect(arg1,arg2) {
+     var result = document.createElement("div");
+     result.innerHTML="";
+    console.log(arg1.correctAnswer);
+    console.log(arg2.textContent);
+    if (arg2.textContent === arg1.correctAnswer)
+    {
+        
+        result.textContent="Right";
+    }
+    else
+    {
+        result.textContent="Wrong";
+        timerCount = timerCount-15;
+    }
+
+    quizQuestions.appendChild(result);
+    currentQuestionIndex++;
+    console.log(currentQuestionIndex);
+    buttonOptions.innerHTML = "";
+   renderQuestion();
+
+
+
+
   }
 
+  
 //The set Timer will start and stops the timer and triggers score()
 
 /* function startTimer() {
@@ -107,5 +138,3 @@ if(this.textContent === myQuestions[QuesIndex].correctAnswer)
 
 //attach eventlistener to statrt button to call startQuiz function on click
 startButton.addEventListener("click",startQuiz);
-/* 
-init(); */
