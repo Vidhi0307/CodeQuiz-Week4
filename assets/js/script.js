@@ -8,6 +8,8 @@ var timerElement =document.querySelector(".timer-count");
 let shuffledQuestions, currentQuestionIndex;   
 var highscore=0 ; var initials='';
 var result = document.createElement("div"); 
+result.className ="result";
+
 var playersInfo = JSON.parse(localStorage.getItem('playersInfo')) || [];
 
 
@@ -77,7 +79,7 @@ function startQuiz(event){
     shuffledQuestions = myQuestions.sort(() => Math.random() - .5)
     
     startTimer();
-    //rendering
+    //rendering questions
     renderQuestion();
 
   }
@@ -89,7 +91,7 @@ function startQuiz(event){
         timerCount--;
         timerElement.textContent= timerCount;
       if(timerCount <= 0){
-        clearInterval(quizTimer);
+      clearInterval(quizTimer);
        endQuiz();
       }
         
@@ -99,15 +101,11 @@ function startQuiz(event){
  }
 
 function renderQuestion() {
-  console.log(currentQuestionIndex);
-  console.log(myQuestions.length);
-  
-if (currentQuestionIndex < myQuestions.length)
-{
+   
+if (currentQuestionIndex < myQuestions.length) {
     var currentAnswerOptions = shuffledQuestions[currentQuestionIndex].answers;
    
-   
- for (const property in currentAnswerOptions) {
+    for (const property in currentAnswerOptions) {
     
     var answerButton = document.createElement("button");
     var option= currentAnswerOptions[property];
@@ -115,14 +113,13 @@ if (currentQuestionIndex < myQuestions.length)
     answerButton.textContent = option;
     answerButton.classList.add("answerButtons");
     currentQuestion.textContent =  selectedQuestion.question;
-    buttonOptions.appendChild(answerButton);
+    document.getElementById('answers').appendChild(answerButton);
     buttonOptions.classList.add("buttonOptions");
 
-
-    answerButton.addEventListener("click", function() {
+     answerButton.addEventListener("click", function() {
         isCorrect(selectedQuestion,this);
       });
-      
+       
 } 
 
 }
@@ -141,12 +138,15 @@ else {
   function endQuiz() {
    
     currentQuestion.textContent =  "All Done !!";
-   
-     timerElement.style.display= "none";
+    while (document.getElementById("answers").firstChild) {
+        document.getElementById("answers").removeChild(document.getElementById("answers").firstChild);
+    } 
+    timerElement.style.display= "none";
+     result.className = "main";
     result.innerHTML= " Your Final score is <b>" + score  +   " <b><br/><br/><h2> Enter Your Initials<h2>" ;
     initials = document.createElement("input");
-   // initials.setAttribute("type", "text");
-    //initials.setAttribute("id", "Initials");
+    initials.setAttribute("type", "text");
+    initials.setAttribute("id", "Initials");
     
    
     var submit = document.createElement("button");
@@ -156,21 +156,19 @@ else {
     result.appendChild(initials); result.appendChild(submit);
 
   };
+
 function submitHighscore() {
 
-    var user = document.getElementById("initials");
-    
+    var user = document.getElementById("Initials");
+    console.log(user);
          var player = {
-       // name: user.value,
+        name: user.value,
         highscore: score,
        };
-
-
-       console.log (playersInfo);
+    
    
        playersInfo.push(player);
-    
-      console.log (playersInfo);
+   
 
       localStorage.setItem("playersInfo", JSON.stringify(playersInfo));
       window.location.href = "highscore.html";
@@ -178,25 +176,29 @@ function submitHighscore() {
 }
 
   function isCorrect(arg1,arg2) {
-    result.textContent=""
-    result.innerHTML="";
+  
      
     if (arg2.textContent === arg1.correctAnswer)
     {
         
         result.textContent="Right";
+       
+
     }
     else 
     {
         result.textContent="Wrong";
         timerCount = timerCount-15;
+       
     }
 
     quizQuestions.appendChild(result);
     currentQuestionIndex++;
    
     buttonOptions.innerHTML = "";
+    
     renderQuestion();
+
 
   }
 
