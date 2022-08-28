@@ -12,6 +12,8 @@ body
     flex-direction :column;
     min-height:100 vh;
     text-align:center;
+    justify-content :space-between;
+
 }
 
 header {
@@ -32,15 +34,17 @@ header {
 main {
     display:flex;
     flex:wrap;
-    justify-content:space-around;
+    justify-content:space-around, center;
     text-align: center;
     flex-direction :column;
 
 }
 
 .answers {
+ 
 display: flex;
-justify-content:space-around;
+max-width: 400px;
+justify-content : space-around;
 text-align: center;
 flex-direction :column;
 }
@@ -54,28 +58,26 @@ button {
     font-size: 1em;
     letter-spacing: 0.21px;
     line-height: 16px;
-    max-width: 255px;
+    max-width: 300px;
     padding: 20px 52px;
     text-align: center;
     transition-duration: 0.15s;
     transition-property: background-color;
     transition-timing-function: linear;
     margin-top: 0.6em;
+    min-width:200x;
+
   }
 
    .quizQuestions {
     display:none;
   } 
 
-  #answerButtons {
-    background: blue;
-    border-radius: 8px;
-    color: #fff;
-    cursor: pointer;
-    font-size: 2em;
-    letter-spacing: 0.21px;
-    line-height: 16px;
-    max-width: 255px;
+  #buttonOptions {
+    display:flex;
+    flex-direction:column;
+    gap : 80px;
+    
   }
 
  
