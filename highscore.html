@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width ,initial-scale=1"/>
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
     <script type="text/javascript">
+        
         function showHighscores(event) {
     event.preventDefault();
     
@@ -13,11 +14,22 @@
     {
     console.log(playerInfo);
      if (playerInfo !== null) {
-      document.getElementById("highscore-list").textContent = playerInfo[x].name + 
+        var listItem = document.createElement('li')
+        
+        listItem.textContent = playerInfo[x].name + 
       " got " + playerInfo[x].highscore;
-    }
+      document.getElementById("highscore-list").appendChild(listItem);
+
+    }    
 }
 }
+function ClearHighscorelist(){
+
+    console.log('clear called');
+    window.localStorage.clear();
+
+ }
+  document.getElementById('clearHighscores').addEventListener("click",ClearHighscorelist);
            window.onload = showHighscores;
         </script>
 </head>
@@ -26,11 +38,11 @@
 <main>
     <div id="highScore" class="container">
                <h1> Highscores</h1>
-        <div id="highscore-list"></div>
+        <ul id="highscore-list"></ul>
         <a href="index.html"><button id="Back">Go back</button></a>
-       <button>Clear highscores</button>
+       <button id="clearHighscores">Clear highscores</button>
     </div>
 </main>
-
+<script src ="assets/js/script.js"></script>
 </body>
 </html>

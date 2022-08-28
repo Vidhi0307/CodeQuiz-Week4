@@ -1,14 +1,16 @@
 var timerCount = 0;
 let quizTimer;
 var startButton =document.querySelector( ".start-button");
-var quizQuestions= document.getElementById('quizQuestions')
+var quizQuestions= document.getElementById('quizQuestions');
 var currentQuestion= document.getElementById('question')
 var buttonOptions= document.getElementById('answers')
 var timerElement =document.querySelector(".timer-count");
 let shuffledQuestions, currentQuestionIndex;   
 var highscore=0 ; var initials='';
+
 var result = document.createElement("div"); 
-var playersInfo =[];
+var playersInfo = JSON.parse(localStorage.getItem('playersInfo')) || [];
+
 
 
 
@@ -151,7 +153,7 @@ function submitHighscore() {
         name: user.value,
         highscore: timerCount
        };
-       console.log (player);
+       console.log (playersInfo);
    
        playersInfo.push(player);
     
@@ -189,9 +191,14 @@ function submitHighscore() {
 
   }
 
+ 
+
 
 //attach eventlistener to statrt button to call startQuiz function on click
 startButton.addEventListener("click",startQuiz);
+
+
+
 
  
 
