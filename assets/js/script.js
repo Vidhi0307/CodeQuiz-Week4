@@ -1,4 +1,4 @@
-var timerCount = 0;
+var timerCount = 0 ,score=0;
 let quizTimer;
 var startButton =document.querySelector( ".start-button");
 var quizQuestions= document.getElementById('quizQuestions');
@@ -7,7 +7,6 @@ var buttonOptions= document.getElementById('answers')
 var timerElement =document.querySelector(".timer-count");
 let shuffledQuestions, currentQuestionIndex;   
 var highscore=0 ; var initials='';
-
 var result = document.createElement("div"); 
 var playersInfo = JSON.parse(localStorage.getItem('playersInfo')) || [];
 
@@ -62,19 +61,23 @@ var myQuestions = [
 
 //startGame function is calles when the start quiz button is clicked
 function startQuiz(event){
+   
     event.preventDefault();
     timerCount= 75;
-    currentQuestionIndex = 0
+    currentQuestionIndex = 0;
 
-  //hiding the start button
+    timerElement.style.display= "block";
+  //hiding the text on homepage and start button
      document.getElementById('container').style.display = "none";
 
-    // displaying the quiz question window
-
+  // displaying the quiz question window
     quizQuestions.style.display = "block";    
+
+  //shuffling the existing questions array
     shuffledQuestions = myQuestions.sort(() => Math.random() - .5)
     
     startTimer();
+    //rendering
     renderQuestion();
 
   }
@@ -85,9 +88,9 @@ function startQuiz(event){
    var quizTimer = setInterval(function(){
         timerCount--;
         timerElement.textContent= timerCount;
-      if(timerCount < 0){
-        timerCount = 0;
-      //  endQuiz();
+      if(timerCount <= 0){
+        clearInterval(quizTimer);
+       endQuiz();
       }
         
         
@@ -98,9 +101,11 @@ function startQuiz(event){
 function renderQuestion() {
   console.log(currentQuestionIndex);
   console.log(myQuestions.length);
+  
 if (currentQuestionIndex < myQuestions.length)
 {
     var currentAnswerOptions = shuffledQuestions[currentQuestionIndex].answers;
+   
    
  for (const property in currentAnswerOptions) {
     
@@ -115,44 +120,52 @@ if (currentQuestionIndex < myQuestions.length)
 
 
     answerButton.addEventListener("click", function() {
-        isCorrect(selectedQuestion,answerButton);
+        isCorrect(selectedQuestion,this);
       });
+      
 } 
 
 }
 else {
-    clearInterval(quizTimer);
-    currentQuestion.textContent =  "All Done !!";
-   // result.classList.add("answers");
-    result.innerHTML= " Your Final score is <b>" + timerCount  +   " <b><br/><br/><h2> Enter Your Initials<h2>" ;
-    initials = document.createElement("input");
-    initials.setAttribute("type", "text");
-    initials.setAttribute("id", "Initials");
-    
+    if(timerCount>=0){
+        score=timerCount;}
+        else {score=0;}
+    endQuiz();
    
-    var submit = document.createElement("button");
-    submit.textContent = "Submit"
-    
-   
-  
-    
-    submit.addEventListener("click",submitHighscore );
-
-    result.appendChild(initials); result.appendChild(submit);
 
 }
 
   }
 
   
+  function endQuiz() {
+   
+    currentQuestion.textContent =  "All Done !!";
+   
+     timerElement.style.display= "none";
+    result.innerHTML= " Your Final score is <b>" + score  +   " <b><br/><br/><h2> Enter Your Initials<h2>" ;
+    initials = document.createElement("input");
+   // initials.setAttribute("type", "text");
+    //initials.setAttribute("id", "Initials");
+    
+   
+    var submit = document.createElement("button");
+    submit.textContent = "Submit"
+        
+    submit.addEventListener("click",submitHighscore );
+    result.appendChild(initials); result.appendChild(submit);
+
+  };
 function submitHighscore() {
 
-    var user = document.getElementById("Initials");
+    var user = document.getElementById("initials");
     
-      var player = {
-        name: user.value,
-        highscore: timerCount
+         var player = {
+       // name: user.value,
+        highscore: score,
        };
+
+
        console.log (playersInfo);
    
        playersInfo.push(player);
@@ -165,16 +178,15 @@ function submitHighscore() {
 }
 
   function isCorrect(arg1,arg2) {
+    result.textContent=""
+    result.innerHTML="";
      
-     result.textContent=""
-     result.innerHTML="";
-   
     if (arg2.textContent === arg1.correctAnswer)
     {
         
         result.textContent="Right";
     }
-    else
+    else 
     {
         result.textContent="Wrong";
         timerCount = timerCount-15;
@@ -186,14 +198,9 @@ function submitHighscore() {
     buttonOptions.innerHTML = "";
     renderQuestion();
 
-
-
-
   }
 
  
-
-
 //attach eventlistener to statrt button to call startQuiz function on click
 startButton.addEventListener("click",startQuiz);
 

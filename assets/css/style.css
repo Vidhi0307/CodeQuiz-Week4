@@ -73,15 +73,21 @@ button {
     display:none;
   } 
 
-  #buttonOptions {
+/*   #buttonOptions {
     display:flex;
     flex-direction:column;
+    justify-content : space-between ;
     gap : 80px;
     
   }
 
-  ul{
+ */  ul{
     list-style: none;
   }
 
- 
+ .results
+ {
+    display:flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+ }

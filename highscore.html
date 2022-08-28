@@ -4,34 +4,7 @@
     <meta charset ="UTF-8"/>  
     <meta name="viewport" content="width=device-width ,initial-scale=1"/>
     <link rel="stylesheet" type="text/css" href="./assets/css/style.css" />
-    <script type="text/javascript">
-        
-        function showHighscores(event) {
-    event.preventDefault();
-    
-    var playerInfo = JSON.parse(localStorage.getItem("playersInfo"));
-    for (var x = 0; x < playerInfo.length; x++)
-    {
-    console.log(playerInfo);
-     if (playerInfo !== null) {
-        var listItem = document.createElement('li')
-        
-        listItem.textContent = playerInfo[x].name + 
-      " got " + playerInfo[x].highscore;
-      document.getElementById("highscore-list").appendChild(listItem);
-
-    }    
-}
-}
-function ClearHighscorelist(){
-
-    console.log('clear called');
-    window.localStorage.clear();
-
- }
-  document.getElementById('clearHighscores').addEventListener("click",ClearHighscorelist);
-           window.onload = showHighscores;
-        </script>
+ 
 </head>
 <body>
 <header></header>
@@ -43,6 +16,6 @@ function ClearHighscorelist(){
        <button id="clearHighscores">Clear highscores</button>
     </div>
 </main>
-<script src ="assets/js/script.js"></script>
+<script src ="assets/js/script1.js"></script>
 </body>
 </html>
